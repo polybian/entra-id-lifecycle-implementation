@@ -1,0 +1,20 @@
+# Real user data — never commit bulk-import CSVs (only *.example templates)
+*.csv
+!templates/*.csv.example
+
+# Script output / offboarding audit logs
+logs/
+*.log
+
+# Local tenant config — group IDs, tenant IDs, connection helpers
+*.local.ps1
+graph-connection.local.ps1
+appsettings*.json
+.env
+.env.*
+
+# Editor / OS noise
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db

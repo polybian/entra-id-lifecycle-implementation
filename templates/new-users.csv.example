@@ -1,0 +1,4 @@
+UserPrincipalName,DisplayName,Department,JobTitle,ManagerUPN,UsageLocation
+jane.doe@contoso.example,Jane Doe,Sales,Account Executive,john.smith@contoso.example,US
+alex.rivera@contoso.example,Alex Rivera,Operations,Warehouse Lead,jane.doe@contoso.example,US
+sam.chen@contoso.example,Sam Chen,IT,Support Technician,john.smith@contoso.example,US
