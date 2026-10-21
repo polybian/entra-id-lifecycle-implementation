@@ -1,4 +1,4 @@
-# Architecture & Design Decisions — Entra ID Lifecycle Lab
+# Architecture & Design Decisions — Entra ID Lifecycle Implementation
 
 ## Tenant structure
 
@@ -29,7 +29,7 @@ this repo implement that loop. One naming convention everywhere:
 
 ## Group-based licensing
 
-Licenses (M365 Business Premium SKU in the lab) are assigned **to groups,
+Licenses (M365 Business Premium SKU in this implementation) are assigned **to groups,
 not to users**. `sec-dept-*` groups carry the license assignment, so a new
 user gets a license the moment the onboarding script drops them into their
 department group — and loses it the moment offboarding removes them.
@@ -70,7 +70,7 @@ script bug into a tenant-wide incident.
 | Requirements | Free, any SKU | Entra ID P1+ |
 | Control | Microsoft-managed baseline | Full policy design (location, device, risk) |
 
-**Lab decision: Conditional Access.** The lab assumes Entra ID P1 (via the
+**Design decision: Conditional Access.** This implementation assumes Entra ID P1 (via the
 M365 Business Premium license), which unlocks CA. One policy requires MFA for
 all users, all cloud apps, with the two break-glass accounts excluded; a
 second policy blocks legacy authentication outright.
@@ -78,7 +78,7 @@ second policy blocks legacy authentication outright.
 Why CA over Security Defaults: Security Defaults is the right call for a
 <300-seat org without P1 — free, no thinking required. But it can't exclude
 break-glass accounts (a lockout risk), can't scope per app, and can't do
-risk-based policies. Since the lab tenant carries P1, CA gives the control
+risk-based policies. Since the test tenant carries P1, CA gives the control
 needed for exclusions and for an MFA registration campaign that targets
 "registered but not enforced" users separately from "never registered".
 

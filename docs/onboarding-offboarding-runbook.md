@@ -71,7 +71,7 @@ time-sensitive — start within the hour for involuntary departures.
 8. **Log it.** Append to the offboarding log: date, admin, UPN, actions taken,
    mailbox/OneDrive disposition, retention deadline. The script writes this
    automatically — attach its log to the ticket.
-9. **Retention, then delete.** After the retention window (lab default: 90
+9. **Retention, then delete.** After the retention window (default: 90
    days post-departure, then the 30-day Entra soft-delete), hard-delete the
    account. Do not hard-delete early — soft-delete is your undo button.
 10. **Post-offboarding audit (next day):**

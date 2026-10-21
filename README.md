@@ -1,7 +1,7 @@
-# Entra ID Lifecycle Lab — User Onboarding / Offboarding Automation
+# Entra ID Lifecycle Implementation — User Onboarding / Offboarding Automation
 
 
-> **Note on sources:** This lab recreates a deployment I administered in a professional role. Company names, hostnames, IP addresses, keys, and tenant identifiers have been sanitized or replaced with placeholders for confidentiality.
+> **Note on sources:** This implementation recreates a deployment I administered in a professional role. Company names, hostnames, IP addresses, keys, and tenant identifiers have been sanitized or replaced with placeholders for confidentiality.
 
 A production-style identity-lifecycle build, mirroring a real Microsoft 365
 tenant administration setup: Entra ID user lifecycle, department security
