@@ -105,7 +105,7 @@ Script comment headers list the exact scopes and prerequisites for each one.
 ## Validation
 
 - All three `.ps1` files: **parsed with the PowerShell 7.4.6 parser —
-  zero syntax errors.** `pwsh` was installed in this sandbox (Linux) purely
+  zero syntax errors.** `pwsh` was installed locally (Linux) purely
   as a parser; it cannot reach any tenant from here.
 - `PSScriptAnalyzer` run against all scripts: results noted in the validation
   log below (style warnings only, no errors).

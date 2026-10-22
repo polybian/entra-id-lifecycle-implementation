@@ -93,22 +93,45 @@ else {
 }
 
 # 3. Remove group memberships.
+#    Dynamic groups and mail-enabled groups / distribution lists CANNOT be
+#    edited here: dynamic membership is rule-driven, and DLs are managed
+#    through Exchange. Remove-MgGroupMemberByRef fails on both — catch it,
+#    log the group's display name (not just its Id), and keep going.
 $groups = Get-MgUserMemberOf -UserId $user.Id -All |
     Where-Object { $_.AdditionalProperties."@odata.type" -eq "#microsoft.graph.group" }
 foreach ($group in $groups) {
-    if ($PSCmdlet.ShouldProcess($UserPrincipalName, "Remove from group $($group.Id)")) {
-        Remove-MgGroupMemberByRef -GroupId $group.Id -DirectoryObjectId $user.Id
-        Write-OffboardLog -Path $logFile -Message "Removed from group $($group.Id)."
+    $groupName = $group.Id
+    try {
+        $groupName = (Get-MgGroup -GroupId $group.Id -ErrorAction Stop).DisplayName
+    }
+    catch {
+        # Fall back to the Id in the log lines below.
+    }
+
+    if ($PSCmdlet.ShouldProcess($UserPrincipalName, "Remove from group '$groupName'")) {
+        try {
+            Remove-MgGroupMemberByRef -GroupId $group.Id -DirectoryObjectId $user.Id -ErrorAction Stop
+            Write-OffboardLog -Path $logFile -Message "Removed from group '$groupName'."
+        }
+        catch {
+            Write-OffboardLog -Path $logFile -Message "SKIPPED group '$groupName' ($($group.Id)): $($_.Exception.Message) -- dynamic or mail-enabled groups must be handled outside Entra ID (see runbook)."
+        }
     }
     else {
-        Write-OffboardLog -Path $logFile -Message "WhatIf: would remove from group $($group.Id)."
+        Write-OffboardLog -Path $logFile -Message "WhatIf: would remove from group '$groupName'."
     }
 }
 
-# 4. Remove directly-assigned licenses (group-inherited ones leave with step 3).
-$licenseDetails = Get-MgUserLicenseDetail -UserId $user.Id
-if ($licenseDetails.Count -gt 0) {
-    $skuIds = @($licenseDetails | ForEach-Object { $_.SkuId })
+# 4. Remove directly-assigned licenses ONLY.
+#    Get-MgUserLicenseDetail returns EVERY license the user holds, including
+#    ones inherited through group membership — and Set-MgUserLicense
+#    -RemoveLicenses FAILS on inherited ones (only the group's own assignment
+#    can release them; step 3 already triggered that by removing the
+#    memberships). So read LicenseAssignmentStates and keep only the
+#    assignments with no AssignedByGroup (i.e. assigned directly to the user).
+$assignmentStates = (Get-MgUser -UserId $user.Id -Property LicenseAssignmentStates).LicenseAssignmentStates
+$skuIds = @($assignmentStates | Where-Object { [string]::IsNullOrEmpty($_.AssignedByGroup) } | ForEach-Object { $_.SkuId })
+if ($skuIds.Count -gt 0) {
     if ($PSCmdlet.ShouldProcess($UserPrincipalName, "Remove $($skuIds.Count) direct license assignment(s)")) {
         Set-MgUserLicense -UserId $user.Id -AddLicenses @() -RemoveLicenses $skuIds
         Write-OffboardLog -Path $logFile -Message "Direct licenses removed: $($skuIds -join ', ')."
@@ -116,6 +139,9 @@ if ($licenseDetails.Count -gt 0) {
     else {
         Write-OffboardLog -Path $logFile -Message "WhatIf: would remove direct licenses: $($skuIds -join ', ')."
     }
+}
+else {
+    Write-OffboardLog -Path $logFile -Message "No directly-assigned licenses to remove (any group-inherited ones release via the step-3 membership removals)."
 }
 
 <#

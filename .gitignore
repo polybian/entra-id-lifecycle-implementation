@@ -6,6 +6,10 @@
 logs/
 *.log
 
+# One-time onboarding passwords — SENSITIVE, never commit
+credentials/
+temp-passwords-*.csv
+
 # Local tenant config — group IDs, tenant IDs, connection helpers
 *.local.ps1
 graph-connection.local.ps1
