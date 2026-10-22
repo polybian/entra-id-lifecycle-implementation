@@ -1,12 +1,13 @@
 # Entra ID Lifecycle Implementation — User Onboarding / Offboarding Automation
 
+At Kime Capital I'm the only IT person, so onboarding and offboarding have to be
+quick and hard to get wrong. There I wrote a PowerShell + Microsoft Graph script that
+creates the user, assigns the license and groups, and generates a Temporary Access
+Pass. This repo rebuilds that process with placeholder data: no real names, domains,
+or tenant IDs.
 
-> **Note on sources:** This implementation recreates a deployment I administered in a professional role. Company names, hostnames, IP addresses, keys, and tenant identifiers have been sanitized or replaced with placeholders for confidentiality.
-
-A production-style identity-lifecycle build, mirroring a real Microsoft 365
-tenant administration setup: Entra ID user lifecycle, department security
-groups, group-based licensing, MFA enforcement reporting, and a scripted
-joiner/mover/leaver process with PowerShell + Microsoft Graph.
+It covers the Entra ID user lifecycle, department security groups, group-based
+licensing, MFA reporting, and a scripted joiner/mover/leaver process.
 
 **What this demonstrates:** Entra ID user lifecycle (create/disable/revoke/
 delete), department + role security groups and dynamic membership rules,
@@ -102,22 +103,13 @@ Script comment headers list the exact scopes and prerequisites for each one.
 - Break-glass accounts are excluded from Conditional Access on purpose,
   protected instead by long passphrases, FIDO2 keys, and alerting on use.
 
-## Validation
+## How I tested it
 
-- All three `.ps1` files: **parsed with the PowerShell 7.4.6 parser —
-  zero syntax errors.** `pwsh` was installed locally (Linux) purely
-  as a parser; it cannot reach any tenant from here.
-- `PSScriptAnalyzer` run against all scripts: results noted in the validation
-  log below (style warnings only, no errors).
-- **Graph cmdlets were NOT executed** — they require a real Entra ID tenant,
-  the Microsoft.Graph SDK, and consented permissions. Nothing here was tested
-  against a live tenant.
-- The runbook steps follow documented Microsoft Entra behavior
-  (account disable, session revoke, license removal, mailbox conversion via
-  Exchange Online); adapt SKU/group names to your tenant before running.
-
-### PSScriptAnalyzer results (2026-10-19, PSScriptAnalyzer 1.25.0)
-
-- `New-UserFromCsv.ps1`: 0 errors, 0 warnings.
-- `Invoke-UserOffboarding.ps1`: 0 errors, 0 warnings.
-- `Get-MfaStatusReport.ps1`: 0 errors, 0 warnings.
+- All three scripts parse with zero errors in PowerShell 7.4.6, and
+  PSScriptAnalyzer 1.25.0 reports 0 errors and 0 warnings on each one.
+- The Graph calls in this repo haven't been run against a live tenant yet.
+  Before using them anywhere real, run each script with `-WhatIf` first and
+  change the SKU and group names to match your tenant.
+- The runbook follows Microsoft's documented behavior for disabling accounts,
+  revoking sessions, removing licenses, and converting mailboxes in Exchange
+  Online.
