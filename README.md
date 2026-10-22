@@ -65,7 +65,6 @@ offboarding.
 | `templates/new-users.csv.example` | CSV template for bulk onboarding (placeholder data only) |
 | `docs/architecture.md` | Tenant structure: groups model, licensing, admin roles, MFA strategy, break-glass |
 | `docs/onboarding-offboarding-runbook.md` | Step-by-step SOP runbook with verification steps |
-| `docs/interview-answers.md` | "How did you do this?" — talking points for interviews |
 | `.gitignore` | Keeps real CSVs, logs, and local config out of the repo |
 
 ## Quick start
