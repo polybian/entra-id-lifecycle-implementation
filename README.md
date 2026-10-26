@@ -1,10 +1,8 @@
 # Entra ID Lifecycle Implementation — User Onboarding / Offboarding Automation
 
-At Kime Capital I'm the only IT person, so onboarding and offboarding have to be
-quick and hard to get wrong. There I wrote a PowerShell + Microsoft Graph script that
-creates the user, assigns the license and groups, and generates a Temporary Access
-Pass. This repo rebuilds that process with placeholder data: no real names, domains,
-or tenant IDs.
+Manual onboarding was slow and easy to get wrong, so I scripted it. At Kime Capital,
+one PowerShell + Microsoft Graph script now handles the account, license, groups, and
+a Temporary Access Pass for day one. Everything here uses placeholder data.
 
 It covers the Entra ID user lifecycle, department security groups, group-based
 licensing, MFA reporting, and a scripted joiner/mover/leaver process.
