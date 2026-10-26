@@ -1,4 +1,4 @@
-# Real user data — never commit bulk-import CSVs (only *.example templates)
+# Real user data - never commit bulk-import CSVs (only *.example templates)
 *.csv
 !templates/*.csv.example
 
@@ -6,11 +6,11 @@
 logs/
 *.log
 
-# One-time onboarding passwords — SENSITIVE, never commit
+# One-time onboarding passwords - SENSITIVE, never commit
 credentials/
 temp-passwords-*.csv
 
-# Local tenant config — group IDs, tenant IDs, connection helpers
+# Local tenant config - group IDs, tenant IDs, connection helpers
 *.local.ps1
 graph-connection.local.ps1
 appsettings*.json

@@ -1,4 +1,4 @@
-# Entra ID Lifecycle Implementation — User Onboarding / Offboarding Automation
+# Entra ID Lifecycle Implementation: User Onboarding / Offboarding Automation
 
 Manual onboarding was slow and easy to get wrong, so I scripted it. At Kime Capital,
 one PowerShell + Microsoft Graph script now handles the account, license, groups, and
@@ -78,10 +78,10 @@ Install-Module Microsoft.Graph -Scope CurrentUser
 # Connect (consent the scopes on first run)
 Connect-MgGraph -Scopes "User.ReadWrite.All","GroupMember.ReadWrite.All" -NoWelcome
 
-# 1. Bulk onboarding — dry run first, always
+# 1. Bulk onboarding - dry run first, always
 .\scripts\New-UserFromCsv.ps1 -CsvPath .\templates\new-users.csv.example -WhatIf
 
-# 2. Offboarding — confirm prompt is built in (ConfirmImpact = High)
+# 2. Offboarding - confirm prompt is built in (ConfirmImpact = High)
 .\scripts\Invoke-UserOffboarding.ps1 -UserPrincipalName "jane.doe@contoso.example" -WhatIf
 
 # 3. MFA registration audit
@@ -97,7 +97,7 @@ Script comment headers list the exact scopes and prerequisites for each one.
 - Both lifecycle scripts support `-WhatIf` (dry run) and `-Confirm`;
   offboarding uses `ConfirmImpact = "High"` so it always asks first.
 - Offboarding revokes refresh tokens (`Revoke-MgUserSignInSession`) **and**
-  blocks sign-in — disabling alone leaves existing sessions alive.
+  blocks sign-in: disabling alone leaves existing sessions alive.
 - Break-glass accounts are excluded from Conditional Access on purpose,
   protected instead by long passphrases, FIDO2 keys, and alerting on use.
 

@@ -95,7 +95,7 @@ else {
 # 3. Remove group memberships.
 #    Dynamic groups and mail-enabled groups / distribution lists CANNOT be
 #    edited here: dynamic membership is rule-driven, and DLs are managed
-#    through Exchange. Remove-MgGroupMemberByRef fails on both — catch it,
+#    through Exchange. Remove-MgGroupMemberByRef fails on both - catch it,
 #    log the group's display name (not just its Id), and keep going.
 $groups = Get-MgUserMemberOf -UserId $user.Id -All |
     Where-Object { $_.AdditionalProperties."@odata.type" -eq "#microsoft.graph.group" }
@@ -124,7 +124,7 @@ foreach ($group in $groups) {
 
 # 4. Remove directly-assigned licenses ONLY.
 #    Get-MgUserLicenseDetail returns EVERY license the user holds, including
-#    ones inherited through group membership — and Set-MgUserLicense
+#    ones inherited through group membership - and Set-MgUserLicense
 #    -RemoveLicenses FAILS on inherited ones (only the group's own assignment
 #    can release them; step 3 already triggered that by removing the
 #    memberships). So read LicenseAssignmentStates and keep only the

@@ -19,7 +19,7 @@
     the license assignment, so there is no per-user license step here.
 
     One-time passwords are written once to a timestamped CSV under
-    .\credentials\ (git-ignored, never printed to the console) — distribute,
+    .\credentials\ (git-ignored, never printed to the console) - distribute,
     then delete. See the TAP note at the bottom of this script for the
     passwordless alternative.
 
@@ -64,17 +64,17 @@ function Get-TemporaryPassword {
     Generates a 16-character temporary password that always satisfies Entra ID
     complexity (at least 3 of 4 character categories). It guarantees at least
     one character from EACH of the four categories (lowercase, uppercase,
-    digit, symbol), fills the rest from the combined pool, and shuffles —
+    digit, symbol), fills the rest from the combined pool, and shuffles - 
     all with a cryptographic RNG
     (System.Security.Cryptography.RandomNumberGenerator), never Get-Random.
 
     The account is created with ForceChangePasswordNextSignIn, so this value
     is single-use. Generated passwords are collected by the main loop and
-    written ONCE to a timestamped CSV under .\credentials\ (see below) —
+    written ONCE to a timestamped CSV under .\credentials\ (see below) - 
     treat that file as sensitive: distribute, then delete it. The modern
     alternative is a Temporary Access Pass
     (New-MgUserAuthenticationTemporaryAccessPassMethod), which avoids
-    handling passwords entirely — see the note at the bottom of this script.
+    handling passwords entirely - see the note at the bottom of this script.
     #>
     $lower   = "abcdefghijkmnpqrstuvwxyz".ToCharArray()
     $upper   = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray()
@@ -183,7 +183,7 @@ $results | Format-Table -AutoSize | Out-String | Write-Output
 Write-Output ("Total rows processed: {0}" -f $results.Count)
 
 # One-time passwords: written ONCE to a timestamped CSV so they can be
-# handed to users/managers. This file is SENSITIVE — it is git-ignored
+# handed to users/managers. This file is SENSITIVE - it is git-ignored
 # (see .gitignore), must never be emailed or committed, and should be
 # securely deleted after distribution. Passwords are NOT printed above.
 if ($credentials.Count -gt 0) {
@@ -194,10 +194,10 @@ if ($credentials.Count -gt 0) {
     $credFile = Join-Path -Path $credDir -ChildPath ("temp-passwords-{0}.csv" -f (Get-Date -Format "yyyyMMdd-HHmmss"))
     $credentials | Export-Csv -Path $credFile -NoTypeInformation -Encoding utf8
     Write-Warning ("Temporary passwords for {0} new user(s) written to: {1}" -f $credentials.Count, $credFile)
-    Write-Warning "SENSITIVE FILE — distribute the passwords, then DELETE it. Consider Temporary Access Pass (TAP) instead of passwords for future onboardings."
+    Write-Warning "SENSITIVE FILE - distribute the passwords, then DELETE it. Consider Temporary Access Pass (TAP) instead of passwords for future onboardings."
 }
 else {
-    Write-Output "No new users created — no passwords generated."
+    Write-Output "No new users created - no passwords generated."
 }
 
 <#
